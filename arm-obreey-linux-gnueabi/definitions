@@ -1,0 +1,37 @@
+#!/bin/sh
+#--|----------------------------------------------------------------
+#--| Eiffel runtime configuration
+#--| Sizes for PocketBook SDKs
+#--| arm-obreey-linux-gnueabi
+#--|
+#--| Copyright (C) 1985-2004 Eiffel Software. All rights reserved.
+#--| Duplication and distribution prohibited.  May be used only with
+#--| ISE Eiffel, under terms of user license.
+#--| Contact Eiffel Software for any other use.
+#--|
+#--| Interactive Software Engineering Inc.
+#--| dba Eiffel Software
+#--| 356 Storke Road, Goleta, CA 93117 USA
+#--| Telephone 805-685-1006, Fax 805-685-6869
+#--| Contact us at: http://www.eiffel.com/general/email.html
+#--| Customer support: http://support.eiffel.com
+#--| For latest info on our award winning products, visit:
+#--|     http://www.eiffel.com
+#--|----------------------------------------------------------------
+
+#Computation/sizes
+byteorder='1234'
+pagesize='4096'
+alignbytes='8'
+doublesize='8'
+intsize='4'
+integer_64_size='8'
+floatsize='4'
+ptrsize='4'
+longsize='4'
+integer_32_size='4'
+integer_16_size='2'
+charsize='1'
+bitpbyte='8'
+lngpad_2='LNGPAD(2)'
+

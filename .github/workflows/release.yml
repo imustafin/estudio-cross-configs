@@ -1,0 +1,61 @@
+name: Release
+on: [push]
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+      HOST: linux-x86-64
+      TARGET: arm-obreey-linux-gnueabi
+    steps:
+      - name: Compute $PLATFORM name
+        run: echo "PLATFORM=${HOST}_${TARGET}" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get C libs from PorterPackage
+        run: |
+          wget -nv https://ftp.eiffel.com/pub/download/19.05/PorterPackage_103187.tar
+          tar -xvf PorterPackage_103187.tar PorterPackage/c.tar.bz2
+      - name: Get complete package
+        run: |
+          file=Eiffel_19.05_gpl_103187-linux-x86-64.tar.bz2
+          wget -nv https://ftp.eiffel.com/pub/download/19.05/$file
+          tar -xvf $file Eiffel_19.05/studio/config/$HOST Eiffel_19.05/studio/spec/$HOST
+          mv Eiffel_19.05 result
+          mv result/studio/config/$HOST result/studio/config/$PLATFORM
+          mv result/studio/spec/$HOST result/studio/spec/$PLATFORM
+      - name: Get PocketBook SDK
+        run: |
+          wget -nv https://github.com/c3pio-man/SDK_6.3.0/archive/refs/tags/6.3.2.tar.gz
+          tar -xf 6.3.2.tar.gz
+      - name: Compile Target libs
+        run: |
+          tar -xf PorterPackage/c.tar.bz2
+          lib=$(pwd)/result/studio/spec/$PLATFORM/lib
+          include=$(pwd)/result/studio/spec/$PLATFORM/include
+          rm $lib/*
+          rm $include/*
+          cat $TARGET/definitions $TARGET/target_compilation > C/CONFIGS/$PLATFORM
+          export CC=$(pwd)/SDK_6.3.0-6.3.2/SDK-A13/usr/bin/arm-obreey-linux-gnueabi-clang
+          export CPP=$(pwd)/SDK_6.3.0-6.3.2/SDK-A13/usr/bin/arm-obreey-linux-gnueabi-clang++
+          cd C
+          ./quick_configure $PLATFORM
+          cp run-time/lib{,mt}{finalized,wkbench}.{a,so} $lib
+          cp run-time/*.h $include
+          cp run-time/eif_stack.{decl,interface} $include
+          cp CONFIGS/$PLATFORM $include/config.sh
+          cd ..
+          rm -rf C
+      - name: Compile bins
+        run: |
+          tar -xf PorterPackage/c.tar.bz2
+          bin=$(pwd)/result/studio/spec/$PLATFORM/bin
+          cat $TARGET/definitions $TARGET/linux-x86_64_host > C/CONFIGS/$PLATFORM
+          cd C
+          ./quick_configure $PLATFORM
+          cp run-time/x2c $bin
+      
+      - name: Generate Resulting Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-x86-64_arm-obreey-linux-gnueabi
+          path: result
