@@ -24,9 +24,11 @@ jobs:
           mv result/studio/config/$HOST result/studio/config/$PLATFORM
           mv result/studio/spec/$HOST result/studio/spec/$PLATFORM
       - name: Get PocketBook SDK
-        run: |
-          wget -nv https://github.com/c3pio-man/SDK_6.3.0/archive/refs/tags/6.3.2.tar.gz
-          tar -xf 6.3.2.tar.gz
+        uses: actions/checkout@v3
+        with:
+          repository:  pocketbook/SDK_6.3.0 
+          ref: 23eb32c3a011a1df4ce3d8f22150dcdd34cbc75a
+          path: SDK_6.3.0-5.19
       - name: Compile Target libs
         run: |
           tar -xf PorterPackage/c.tar.bz2
@@ -35,8 +37,8 @@ jobs:
           rm $lib/*
           rm $include/*
           cat $TARGET/definitions $TARGET/target_compilation > C/CONFIGS/$PLATFORM
-          export CC=$(pwd)/SDK_6.3.0-6.3.2/SDK-A13/usr/bin/arm-obreey-linux-gnueabi-clang
-          export CPP=$(pwd)/SDK_6.3.0-6.3.2/SDK-A13/usr/bin/arm-obreey-linux-gnueabi-clang++
+          export CC=$(pwd)/SDK_6.3.0-5.19/SDK-A13/usr/bin/arm-obreey-linux-gnueabi-clang
+          export CPP=$(pwd)/SDK_6.3.0-5.19/SDK-A13/usr/bin/arm-obreey-linux-gnueabi-clang++
           cd C
           ./quick_configure $PLATFORM
           cp run-time/lib{,mt}{finalized,wkbench}.{a,so} $lib
