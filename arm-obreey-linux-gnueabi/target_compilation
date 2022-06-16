@@ -180,7 +180,7 @@ d_tls='undef'
 objcflags='-ObjC'
 mtccflags="$ccflags -DEIF_THREADS -DEIF_POSIX_THREADS"
 mtcppflags="$cppflags -DEIF_THREADS -DEIF_POSIX_THREADS"
-optimize="-mcpu=cortex-a8 -march=armv7-a -mfpu=neon -mfloat-abi=softfp -DNDEBUG -s -fsigned-char -fomit-frame-pointer -fPIC -Wall -O2 -Wno-format-y2k"
+optimize="-mcpu=cortex-a8 -march=armv7-a -mfpu=neon -mfloat-abi=softfp -DNDEBUG -fsigned-char -fomit-frame-pointer -fPIC -Wall -O2 -Wno-format-y2k"
 voidflags='15'
 #Check value for next 1
 warning_level='-Wall'
